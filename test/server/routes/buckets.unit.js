@@ -2791,6 +2791,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, null, testUser);
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err).to.be.instanceOf(errors.TransferRateError);
         expect(err.message)
@@ -2814,6 +2815,7 @@ describe('BucketsRouter', function() {
         req: request,
         eventEmitter: EventEmitter
       });
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err.message).to.equal('Not authorized');
         done();
@@ -2845,7 +2847,7 @@ describe('BucketsRouter', function() {
         bucketsRouter.storage.models.User,
         'findOne'
       ).callsArgWith(1, null, someUser);
-
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err.message).to.equal('Query failed');
         done();
@@ -2878,6 +2880,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, new Error('user test'));
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err).to.be.instanceOf(errors.InternalError);
         expect(err.message).to.equal('user test');
@@ -2911,6 +2914,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, null, null);
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err).to.be.instanceOf(errors.NotFoundError);
         expect(err.message).to.equal('User not found for bucket');
@@ -2943,6 +2947,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, null, someUser);
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         _bucketFindOne.restore();
         expect(err.message).to.equal('Bucket not found');
@@ -2988,6 +2993,7 @@ describe('BucketsRouter', function() {
         exec: sandbox.stub().callsArgWith(0, new Error('Query failed'))
       });
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err.message).to.equal('Query failed');
         done();
@@ -3032,6 +3038,7 @@ describe('BucketsRouter', function() {
         exec: sandbox.stub().callsArgWith(0, null, null)
       });
 
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err.message).to.equal('File not found');
         done();
@@ -3084,6 +3091,8 @@ describe('BucketsRouter', function() {
         bucketsRouter,
         '_getPointersFromEntry'
       ).callsArgWith(3, new Error('Failed to get token'));
+
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response, function(err) {
         expect(err.message).to.equal('Failed to get token');
         done();
@@ -3146,6 +3155,9 @@ describe('BucketsRouter', function() {
         '_getPointersFromEntry'
       ).callsArgWith(3, null, pointers);
       response.on('end', function() {
+        expect(bucketsRouter._createStorageEvents.callCount).to.equal(1);
+        expect(bucketsRouter._createStorageEvents.args[0][0]).to.equal(testUser);
+        expect(bucketsRouter._createStorageEvents.args[0][1]).to.equal(pointers);
         expect(bucketsRouter.storage.models.Bucket.findOne.args[0][0])
           .to.eql({ _id: 'bucketid' });
         expect(bucketsRouter._getPointersFromEntry.args[0][2])
@@ -3155,6 +3167,7 @@ describe('BucketsRouter', function() {
         );
         done();
       });
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response);
     });
 
@@ -3221,6 +3234,7 @@ describe('BucketsRouter', function() {
         );
         done();
       });
+      sandbox.stub(bucketsRouter, '_createStorageEvents');
       bucketsRouter.getFile(request, response);
     });
 
