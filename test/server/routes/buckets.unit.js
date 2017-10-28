@@ -2546,14 +2546,14 @@ describe('BucketsRouter', function() {
           storage: 0,
           success: false
         });
-      };
+      }
       const save = sandbox.stub().callsArg(0);
       StorageEvent.prototype.save = save;
       testBucketsRouter.storage = {
         models: {
           StorageEvent: StorageEvent
         }
-      }
+      };
       testBucketsRouter._createStorageEvents(user, results, (err) => {
         if (err) {
           return done(err);
@@ -3872,7 +3872,7 @@ describe('BucketsRouter', function() {
       sandbox.stub(
         bucketsRouter.storage.models.BucketEntry,
         'findOne'
-      ).callsArgWith(1, new Error('test'))
+      ).callsArgWith(1, new Error('test'));
       bucketsRouter.removeFile(request, response, function(err) {
         expect(err).to.be.instanceOf(Error);
         expect(err.message).to.equal('test');
@@ -3901,7 +3901,7 @@ describe('BucketsRouter', function() {
       sandbox.stub(
         bucketsRouter.storage.models.BucketEntry,
         'findOne'
-      ).callsArgWith(1, null, null)
+      ).callsArgWith(1, null, null);
       bucketsRouter.removeFile(request, response, function(err) {
         expect(err).to.be.instanceOf(errors.NotFoundError);
         expect(err.message).to.equal('File not found');
@@ -3932,7 +3932,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, null, {
         remove: sandbox.stub().callsArgWith(0, null)
-      })
+      });
       const hashes = ['hash'];
       sandbox.stub(bucketsRouter, '_getShardHashesByBucketEntryId')
         .callsArgWith(2, null, hashes);
@@ -3969,7 +3969,7 @@ describe('BucketsRouter', function() {
         'findOne'
       ).callsArgWith(1, null, {
         remove: sandbox.stub().callsArgWith(0, new Error('test'))
-      })
+      });
       const hashes = ['hash'];
       sandbox.stub(bucketsRouter, '_getShardHashesByBucketEntryId')
         .callsArgWith(2, null, hashes);
@@ -4009,7 +4009,7 @@ describe('BucketsRouter', function() {
           size: 1000
         },
         remove: sinon.stub().callsArg(0)
-      })
+      });
       const hashes = ['hash'];
       sandbox.stub(bucketsRouter, '_getShardHashesByBucketEntryId')
         .callsArgWith(2, null, hashes);
