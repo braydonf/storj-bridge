@@ -566,10 +566,11 @@ describe('ReportsRouter', function() {
     });
 
     it('should trigger a mirror on MIRROR_FAILED', function(done) {
+      const event = {};
       reportsRouter._handleExchangeReport({
         shardHash: 'hash',
         exchangeResultMessage: 'MIRROR_FAILED'
-      }, done);
+      }, event, done);
     });
 
     it('should trigger a mirror on DOWNLOAD_ERROR', function(done) {
